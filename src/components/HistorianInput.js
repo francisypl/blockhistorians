@@ -24,8 +24,6 @@ class HistorianInput extends Component {
       resources: this.state.resources
     };
 
-    console.log('fileData =>', fileData);
-    
     ipfsFunctions.uploadEntry(fileData)
       .then(res => console.log(res))
       .catch(err => console.log(err))
