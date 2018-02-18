@@ -21,6 +21,10 @@ contract BlockHistorians {
     _owner = msg.sender;
   }
 
+  function getVersion() public pure returns (string) {
+    return 'blockhistorians_v0.0.1';
+  }
+
   function getPassThreshold() public view returns (uint256) {
     return numHistorians * 2 / 3;
   }

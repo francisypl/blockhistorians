@@ -7,6 +7,11 @@ contract('BlockHistorians', accounts => {
     instance = await BlockHistorians.new();
   });
 
+  it('should get the contract version', async () => {
+    const version = await instance.getVersion.call();
+    assert.equal('blockhistorians_v0.0.1', version, 'version did not match');
+  });
+
   it('should be able to add historians', async () => {
     await instance.addHistorian({ from: accounts[0] });
     await instance.addHistorian({ from: accounts[1] });
