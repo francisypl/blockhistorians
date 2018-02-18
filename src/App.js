@@ -16,6 +16,8 @@ class App extends Component {
       contractVersion: '',
       blockHistoriansInstance: null,
       entries: [],
+      proposals: [],
+      curAccount: '',
       web3: null
     }
   }
@@ -32,10 +34,14 @@ class App extends Component {
 
       // Instantiate contract once web3 provided.
       await this.instantiateContract();
-      const { blockHistoriansInstance } = this.state;
+      const { blockHistoriansInstance, web3 } = this.state;
+      web3.eth.getAccounts((err, accounts) => {
+        this.setState({curAccount: accounts[0]});
+      });
       const version = await blockHistoriansInstance.getVersion();
       const entries = await blockHistoriansInstance.getEntries();
-      this.setState({ contractVersion: version, entries });
+      const proposals = await blockHistoriansInstance.getProposals();
+      this.setState({ contractVersion: version, entries, proposals });
     })
     .catch((e) => {
       console.log('Error finding web3.', e);
@@ -50,18 +56,20 @@ class App extends Component {
   }
 
   render() {
-    const { contractVersion, entries } = this.state;
+    const { contractVersion, entries, proposals, curAccount } = this.state;
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
             <a href="#" className="pure-menu-heading pure-menu-link">Block Historians</a>
-            <span style={{ color: 'white' }}>Contract Version: { contractVersion }</span>
+            <span className="pure-menu-heading pure-menu-link">Contract Version: { contractVersion }</span>
+            <span className="pure-menu-heading pure-menu-link">Logged In As: { curAccount }</span>
         </nav>
 
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">
-              <EntriesList entries={ entries } />
+              <EntriesList title={ 'History' } entries={ entries } vote={ false }/>
+              { curAccount && <EntriesList title={ 'Proposals' } entries={ proposals } vote={ true } /> }
             </div>
           </div>
         </main>

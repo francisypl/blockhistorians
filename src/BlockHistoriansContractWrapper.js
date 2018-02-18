@@ -34,6 +34,60 @@ export default class BlockHistoriansContractWrapper {
             date: 'date 3',
             text: 'news 3 foo bar',
             resource: ['https://i.imgur.com/eqphLAA.jpg']
+          },
+          {
+            date: 'date 1',
+            text: 'news 1 aosndf',
+            resource: ['https://i.imgur.com/vdKC9kr.jpg']
+          }, 
+          {
+            date: 'date 2',
+            text: 'news 2 lalala',
+            resource: ['https://i.imgur.com/ygZ5PGA.jpg']
+          },
+          {
+            date: 'date 3',
+            text: 'news 3 foo bar',
+            resource: ['https://i.imgur.com/eqphLAA.jpg']
+          }
+        ]);
+      }, 500);
+    });
+  }
+
+  async getProposals() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve([
+          {
+            date: 'date 1',
+            text: 'news 1 aosndf',
+            resource: ['https://i.imgur.com/vdKC9kr.jpg']
+          }, 
+          {
+            date: 'date 2',
+            text: 'news 2 lalala',
+            resource: ['https://i.imgur.com/ygZ5PGA.jpg']
+          },
+          {
+            date: 'date 3',
+            text: 'news 3 foo bar',
+            resource: ['https://i.imgur.com/eqphLAA.jpg']
+          },
+          {
+            date: 'date 1',
+            text: 'news 1 aosndf',
+            resource: ['https://i.imgur.com/vdKC9kr.jpg']
+          }, 
+          {
+            date: 'date 2',
+            text: 'news 2 lalala',
+            resource: ['https://i.imgur.com/ygZ5PGA.jpg']
+          },
+          {
+            date: 'date 3',
+            text: 'news 3 foo bar',
+            resource: ['https://i.imgur.com/eqphLAA.jpg']
           }
         ]);
       }, 500);
