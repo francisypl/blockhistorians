@@ -27,6 +27,7 @@ class App extends Component {
 
     this.cancelAddView = this.cancelAddView.bind(this);
     this.sumbitNewEntry = this.sumbitNewEntry.bind(this);
+    this.submitVote = this.submitVote.bind(this);
   }
 
   componentWillMount() {
@@ -71,12 +72,17 @@ class App extends Component {
     this.setState({ addNew: false });
   }
 
+  async submitVote(hash, isUpvote) {
+    const { blockHistoriansInstance } = this.state;
+    await blockHistoriansInstance.vote(hash, isUpvote);
+  }
+
   render() {
     const { contractVersion, entries, proposals, curAccount, addNew, notification } = this.state;
     const ListView = () => (
       <div className="pure-u-1-1">
         <EntriesList title={ 'History' } entries={ entries } vote={ false }/>
-        { curAccount && <EntriesList title={ 'Proposals' } entries={ proposals } vote={ true } /> }
+        { curAccount && <EntriesList title={ 'Proposals' } entries={ proposals } submitVote={ this.submitVote } vote={ true } /> }
       </div>
     );
     const AddView = () => (

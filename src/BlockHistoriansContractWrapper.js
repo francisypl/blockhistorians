@@ -14,6 +14,7 @@ export default class BlockHistoriansContractWrapper {
     this.instance = await blockHistorians.deployed();
     const accounts = await Promise.promisify(this.web3.eth.getAccounts)();
     this.account = accounts[0];
+    await this.addHistorian();
   }
 
   async getVersion() {
@@ -33,14 +34,18 @@ export default class BlockHistoriansContractWrapper {
     return await Promise.all(promises)
   }
 
+  async addHistorian() {
+    return await this.instance.addHistorian({ from: this.account });
+  }
+
   async addProposal(hash) {
-    const hexHash = this.web3.fromAscii(hash);
+    const hexHash = this.web3.fromAscii(hash, 32);
     console.log('addProposal: hexHash =>', hexHash);
     return await this.instance.addProposal(hexHash, { from: this.account });
   }
 
   async vote(hash, isUpvote) {
-    const hexHash = this.web3.fromAscii(hash);
+    const hexHash = this.web3.fromAscii(hash, 32);
     console.log('vote: hexHash =>', hexHash, isUpvote);
     return await this.instance.vote(hexHash, isUpvote, { from: this.account });
   }
@@ -53,7 +58,7 @@ export default class BlockHistoriansContractWrapper {
             date: 'date 1',
             text: 'news 1 aosndf',
             resource: ['https://i.imgur.com/vdKC9kr.jpg'],
-            hash: 'QmfUjPXvaHW78GPH8gVQC8J3Vbc1z4Bgbw71udZsQemEVH'
+            hash: 'QmQFdyANXLmgxZPbGparNQ2evpygomjt2j1QMDU2SnSzcQ'
           },
           {
             date: 'date 2',

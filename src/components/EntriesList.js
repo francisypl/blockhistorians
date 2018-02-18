@@ -25,6 +25,16 @@ const styles = theme => ({
 });
 
 class EntriesList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.voteProxy = this.voteProxy.bind(this);
+  }
+
+  voteProxy(hash, isUpvote) {
+    hash && this.props.submitVote(hash, isUpvote);
+  }
+
   render() {
     const { entries, classes, title, vote } = this.props;
     return (
@@ -44,8 +54,8 @@ class EntriesList extends Component {
                   </CardContent>
                   {vote && 
                     <CardActions>
-                      <Button size="small">Approve</Button>
-                      <Button size="small">Reject</Button>
+                      <Button onClick={this.voteProxy.bind(this, entry.hash || '', true)} size="small">Approve</Button>
+                      <Button onClick={this.voteProxy.bind(this, entry.hash || '', false)} size="small">Reject</Button>
                     </CardActions>}
                 </Card>
               </div>)
