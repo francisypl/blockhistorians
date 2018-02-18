@@ -15,11 +15,6 @@ class HistorianInput extends Component {
       resources: '',
     };
     this.formatDocument = this.formatDocument.bind(this);
-    this.setDate = this.setDate.bind(this);
-  }
-
-  setDate(event, date) {
-    this.setState({ date })
   }
 
   formatDocument() {
@@ -27,7 +22,9 @@ class HistorianInput extends Component {
       date: this.state.date,
       text: this.state.text,
       resources: this.state.resources
-    }
+    };
+
+    console.log('fileData =>', fileData);
     
     ipfsFunctions.uploadEntry(fileData)
       .then(res => console.log(res))
@@ -56,17 +53,17 @@ class HistorianInput extends Component {
             shrink: true,
           }}
           margin='normal'
-          onChange={ this.setDate }
+          onChange={ event => this.setState({ date: event.target.value }) }
         />
         <TextField
           label='Event Description'
           margin='normal'
-          onChange={event => this.setState({ text: event.target.value })}
+          onChange={ event => this.setState({ text: event.target.value }) }
         />
         <TextField
           label='Resources'
           margin='normal'
-          onChange={event => this.setState({ resources: event.target.value })}
+          onChange={ event => this.setState({ resources: event.target.value }) }
         />
         <Button variant='raised' color='primary' style={{ marginTop: '20px' }} onClick={this.formatDocument}>Submit</Button>
         <Button variant='raised' color='secondary' style={{ marginTop: '15px' }} onClick={this.props.cancel}>Cancel</Button>
