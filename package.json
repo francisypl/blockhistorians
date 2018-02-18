@@ -49,7 +49,9 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "bluebird": "^3.5.1",
     "dotenv": "^2.0.0",
+    "ipfs-mini": "^1.1.2",
     "original-require": "^1.0.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
