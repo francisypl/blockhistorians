@@ -60,9 +60,9 @@ class App extends Component {
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
-            <a href="#" className="pure-menu-heading pure-menu-link">Block Historians</a>
-            <span className="pure-menu-heading pure-menu-link">Contract Version: { contractVersion }</span>
-            <span className="pure-menu-heading pure-menu-link">Logged In As: { curAccount }</span>
+          <a href="#" className="pure-menu-heading pure-menu-link">Block Historians</a>
+          <span className="pure-menu-heading pure-menu-link">Contract Version: { contractVersion }</span>
+          <span className="pure-menu-heading pure-menu-link">Logged In As: { curAccount }</span>
         </nav>
 
         <main className="container">
