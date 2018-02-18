@@ -51,7 +51,11 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "dotenv": "^2.0.0",
+<<<<<<< HEAD
     "ipfs-mini": "^1.1.2",
+=======
+    "ipfs-api": "^18.0.0",
+>>>>>>> ccbfba0621793f664227358a748215f6ac248690
     "original-require": "^1.0.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
