@@ -6,14 +6,14 @@ contract BlockHistorians {
   using SafeMath for uint256;  
 
   struct Proposal {
-		bytes32 ipfsHash;
 		address historian;
+    uint256 votes;
+    mapping(address => bool) voters;
 	}
 
   address _owner;
   bytes32[] public entries;
-  Proposal[] public proposals;
-  mapping(bytes32 => uint256) public votes;
+  mapping(bytes32 => Proposal) public proposals;
   mapping(address => bool) public historians;
   uint256 public numHistorians;
 
@@ -25,39 +25,42 @@ contract BlockHistorians {
     return numHistorians * 2 / 3;
   }
 
-  function addHistorian(address _addr) public {
-    historians[_addr] = true;
+  function addHistorian() public {
+    if (!historians[msg.sender]) {
+      historians[msg.sender] = true;
+      numHistorians = numHistorians.add(1);
+    }
+  }
+
+  function addProposal(bytes32 proposal) public {
+    proposals[proposal] = Proposal(msg.sender, 0);
   }
 
   function vote(bytes32 proposal, bool isUpvote) public {
+    assert(!proposals[proposal].voters[msg.sender]);
+    proposals[proposal].voters[msg.sender] = true;
     uint256 threshold = getPassThreshold();
-    for (uint x = 0; x < proposals.length; x++) {
-      if (proposals[x].ipfsHash == proposal) {
-        if (isUpvote) {
-          votes[proposal] = votes[proposal].add(1);
-          if (votes[proposal] > threshold) {
-            entries.push(proposal);
-            delete votes[proposal];
-            break;
-          }
-        } else {
-          if (votes[proposal] > 0) {
-            votes[proposal] = votes[proposal].sub(1);
-          }
-        }
+    if (isUpvote) {
+      proposals[proposal].votes = proposals[proposal].votes.add(1);
+      if (proposals[proposal].votes > threshold) {
+        entries.push(proposal);
+      }
+    } else {
+      if (proposals[proposal].votes > 0) {
+        proposals[proposal].votes = proposals[proposal].votes.sub(1);
       }
     }
   }
 
   function getVotes(bytes32 proposal) public view returns (uint256) {
-    return votes[proposal];
+    return proposals[proposal].votes;
   }
 
-  function getEntities() public view returns (bytes32[]) {
+  function getProposalHistorian(bytes32 proposal) public view returns (address) {
+    return proposals[proposal].historian;
+  }
+
+  function getEntries() public view returns (bytes32[]) {
     return entries;
-  }
-
-  function get() public pure returns (uint) {
-    return 5;
   }
 }
