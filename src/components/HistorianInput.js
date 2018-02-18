@@ -17,7 +17,7 @@ class HistorianInput extends Component {
     this.formatDocument = this.formatDocument.bind(this);
   }
 
-  formatDocument() {
+  formatDocument() { //TODO: move this fn out of dumb component
     let fileData = {
       date: this.state.date,
       text: this.state.text,
@@ -25,7 +25,7 @@ class HistorianInput extends Component {
     };
 
     ipfsFunctions.uploadEntry(fileData)
-      .then(res => console.log(res))
+      .then(res => this.props.newEntry(res))
       .catch(err => console.log(err))
   }
 

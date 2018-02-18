@@ -20,11 +20,13 @@ class App extends Component {
       entries: [],
       proposals: [],
       curAccount: '',
+      notification: '',
       addNew: false,
       web3: null
     }
 
     this.cancelAddView = this.cancelAddView.bind(this);
+    this.sumbitNewEntry = this.sumbitNewEntry.bind(this);
   }
 
   componentWillMount() {
@@ -39,10 +41,8 @@ class App extends Component {
 
       // Instantiate contract once web3 provided.
       await this.instantiateContract();
-      const { blockHistoriansInstance, web3 } = this.state;
-      web3.eth.getAccounts((err, accounts) => {
-        this.setState({curAccount: accounts[0]});
-      });
+      const { blockHistoriansInstance } = this.state;
+      this.setState({ curAccount: blockHistoriansInstance.account });
       const version = await blockHistoriansInstance.getVersion();
       const entries = await blockHistoriansInstance.getEntries();
       const proposals = await blockHistoriansInstance.getProposals();
@@ -51,6 +51,13 @@ class App extends Component {
     .catch((e) => {
       console.log('Error finding web3.', e);
     });
+  }
+
+  async sumbitNewEntry(entryHash) {
+    console.log('entryHash =>', entryHash);
+    const { blockHistoriansInstance } = this.state;
+    await blockHistoriansInstance.addProposal(entryHash);
+    this.setState({ addNew: false, notification: 'Your Proposal is posted and currently being reviewed by your peer historians.' });
   }
 
   async instantiateContract() {
@@ -65,7 +72,7 @@ class App extends Component {
   }
 
   render() {
-    const { contractVersion, entries, proposals, curAccount, addNew } = this.state;
+    const { contractVersion, entries, proposals, curAccount, addNew, notification } = this.state;
     const ListView = () => (
       <div className="pure-u-1-1">
         <EntriesList title={ 'History' } entries={ entries } vote={ false }/>
@@ -74,25 +81,39 @@ class App extends Component {
     );
     const AddView = () => (
       <div className="pure-u-1-1">
-        <HistorianInput cancel={this.cancelAddView}/>
+        <HistorianInput 
+          cancel={ this.cancelAddView }
+          newEntry={ this.sumbitNewEntry }
+        />
       </div>
+    );
+    const NotifyBanner = (props) => (
+      <div style={{
+        width: '100%',
+        height: '30px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'green',
+        color: 'white'
+      }}>{ props.text }</div>
     );
 
     return (
       <div className="App">
-        <nav className="navbar pure-menu pure-menu-horizontal">
-          <a href="#" className="pure-menu-heading pure-menu-link">Block Historians</a>
+        <nav style={{ position: 'relative', top: '0px' }} className="navbar pure-menu pure-menu-horizontal">
+          <a href="#" onClick={() => this.setState({ notification: false, addNew: false })} className="pure-menu-heading pure-menu-link">Block Historians</a>
           <span className="pure-menu-heading pure-menu-link">Contract Version: { contractVersion }</span>
           <span className="pure-menu-heading pure-menu-link">Logged In As: { curAccount }</span>
-          <Button 
+          {curAccount && <Button 
             style={{ float: 'right' }}
             variant='raised'
             color='primary'
-            onClick={() => this.setState({addNew: true})}>
+            onClick={() => this.setState({addNew: true, notification: false})}>
             New
-          </Button>
+          </Button>}
         </nav>
-
+        { notification ? <NotifyBanner text={ notification } /> : null }
         <main className="container">
           <div className="pure-g">
             { addNew ? <AddView /> : <ListView /> }

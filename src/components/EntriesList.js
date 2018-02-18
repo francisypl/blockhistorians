@@ -31,23 +31,25 @@ class EntriesList extends Component {
       <div style={{ marginTop: '30px' }}>
         <Typography variant="headline" component="h1">{ title }</Typography>
         <div style={{ display: 'flex', overflow: 'scroll' }}>
-          {entries && entries.map((entry, index) =>
-            <div key={ index } style={{ margin: '10px' }}>
-              <Card className={classes.card}>
-                <CardContent>
-                  <Typography variant="headline" component="h2">
-                    { entry.date || 'Date Not Avalialbe' }
-                  </Typography>
-                  <Typography className={classes.pos}>{ entry.text || 'No Text Avaliable' }</Typography>
-                </CardContent>
-                {vote && 
-                  <CardActions>
-                    <Button size="small">Approve</Button>
-                    <Button size="small">Reject</Button>
-                  </CardActions>}
-              </Card>
-            </div>
-          )}
+          {entries && entries.length === 0 ?
+            <Typography variant="headline" component="h3">{ 'Nothing to Show' }</Typography> :
+            entries.map((entry, index) =>
+              <div key={ index } style={{ margin: '10px' }}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Typography variant="headline" component="h2">
+                      { entry.date || 'Date Not Avalialbe' }
+                    </Typography>
+                    <Typography className={classes.pos}>{ entry.text || 'No Text Avaliable' }</Typography>
+                  </CardContent>
+                  {vote && 
+                    <CardActions>
+                      <Button size="small">Approve</Button>
+                      <Button size="small">Reject</Button>
+                    </CardActions>}
+                </Card>
+              </div>)
+          }
         </div>
       </div>
     );
