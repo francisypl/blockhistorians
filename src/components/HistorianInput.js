@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import DatePicker from 'material-ui/DatePicker';
 import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Button from 'material-ui/Button';
+import Typography from 'material-ui/Typography';
 
 import ipfsFunctions from '../utils/getIpfsHash';
 
@@ -36,31 +35,42 @@ class HistorianInput extends Component {
   }
 
   render() {
+    const containerStyles = {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '70%',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      marginTop: '150px'
+    };
     return (
-      <MuiThemeProvider>
-        <div>
-          <DatePicker
-            hintText="Select date of event"
-            onChange={this.setDate}
-          />
-          <div>
-            <TextField
-              hintText="Enter event here"
-              onChange={event => this.setState({ text: event.target.value })}
-            />
-          </div>
-          <div>
-            <TextField
-              hintText="Enter resources"
-              onChange={event => this.setState({ resources: event.target.value })}
-            />
-          </div>
-          <RaisedButton 
-            label="Submit"
-            onClick={this.formatDocument}
-          />
-        </div>
-      </MuiThemeProvider >
+      <div style={containerStyles}>
+        <Typography variant="headline" style={{ marginBottom: '20px' }} component="h1">
+          { 'New Proposal' }
+        </Typography>
+        <TextField
+          label="Date of Event"
+          type="date"
+          style={{ margin: '10px' }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          margin='normal'
+          onChange={ this.setDate }
+        />
+        <TextField
+          label='Event Description'
+          margin='normal'
+          onChange={event => this.setState({ text: event.target.value })}
+        />
+        <TextField
+          label='Resources'
+          margin='normal'
+          onChange={event => this.setState({ resources: event.target.value })}
+        />
+        <Button variant='raised' color='primary' style={{ marginTop: '20px' }} onClick={this.formatDocument}>Submit</Button>
+        <Button variant='raised' color='secondary' style={{ marginTop: '15px' }} onClick={this.props.cancel}>Cancel</Button>
+      </div>
     )
   }
 }

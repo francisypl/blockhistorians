@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import getWeb3 from './utils/getWeb3'
 import ContractHelper from './BlockHistoriansContractWrapper';
 import EntriesList from './components/EntriesList';
+import HistorianInput from './components/HistorianInput';
+import Button from 'material-ui/Button';
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -18,8 +20,11 @@ class App extends Component {
       entries: [],
       proposals: [],
       curAccount: '',
+      addNew: false,
       web3: null
     }
+
+    this.cancelAddView = this.cancelAddView.bind(this);
   }
 
   componentWillMount() {
@@ -55,22 +60,42 @@ class App extends Component {
     return helper;
   }
 
+  cancelAddView() {
+    this.setState({ addNew: false });
+  }
+
   render() {
-    const { contractVersion, entries, proposals, curAccount } = this.state;
+    const { contractVersion, entries, proposals, curAccount, addNew } = this.state;
+    const ListView = () => (
+      <div className="pure-u-1-1">
+        <EntriesList title={ 'History' } entries={ entries } vote={ false }/>
+        { curAccount && <EntriesList title={ 'Proposals' } entries={ proposals } vote={ true } /> }
+      </div>
+    );
+    const AddView = () => (
+      <div className="pure-u-1-1">
+        <HistorianInput cancel={this.cancelAddView}/>
+      </div>
+    );
+
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
           <a href="#" className="pure-menu-heading pure-menu-link">Block Historians</a>
           <span className="pure-menu-heading pure-menu-link">Contract Version: { contractVersion }</span>
           <span className="pure-menu-heading pure-menu-link">Logged In As: { curAccount }</span>
+          <Button 
+            style={{ float: 'right' }}
+            variant='raised'
+            color='primary'
+            onClick={() => this.setState({addNew: true})}>
+            New
+          </Button>
         </nav>
 
         <main className="container">
           <div className="pure-g">
-            <div className="pure-u-1-1">
-              <EntriesList title={ 'History' } entries={ entries } vote={ false }/>
-              { curAccount && <EntriesList title={ 'Proposals' } entries={ proposals } vote={ true } /> }
-            </div>
+            { addNew ? <AddView /> : <ListView /> }
           </div>
         </main>
       </div>
